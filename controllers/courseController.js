@@ -3,9 +3,9 @@ const {
   getById,
   deleteById,
   updateById,
+  enrollUser,
 } = require("../services/courseService");
 const { parseError } = require("../util/parser");
-
 const courseController = require("express").Router();
 
 courseController.get("/create", (req, res) => {
@@ -18,6 +18,7 @@ courseController.get("/:id", async (req, res) => {
   const course = await getById(req.params.id);
 
   course.isOwner = course.owner.toString() == req.user._id.toString();
+  course.enrolled = course.users.map(x => x.toString()).includes(req.user._id.toString());
 
   res.render("details", {
     title: course.title,
@@ -57,7 +58,7 @@ courseController.post("/create", async (req, res) => {
 });
 
 courseController.get("/:id/edit", async (req, res) => {
-  const course = await getById(req.params.id); // с _ или без _
+  const course = await getById(req.params.id);
 
   if (course.owner.toString() != req.user._id.toString()) {
     return res.redirect("/auth/login");
@@ -69,7 +70,7 @@ courseController.get("/:id/edit", async (req, res) => {
 });
 
 courseController.post("/:id/edit", async (req, res) => {
-  const course = await getById(req.params.id); // с _ или без _
+  const course = await getById(req.params.id);
 
   if (course.owner.toString() != req.user._id.toString()) {
     return res.redirect("/auth/login");
@@ -85,6 +86,21 @@ courseController.post("/:id/edit", async (req, res) => {
       course: req.body,
     });
   }
+});
+
+courseController.get("/:id/enroll", async (req, res) => {
+  const course = await getById(req.params.id);
+
+  if (
+    course.owner.toString() != req.user._id.toString() &&
+    course.users
+      .map((x) => x.toString())
+      .includes(req.user._id.toString() == false)
+  ) {
+    await enrollUser(req.params.id, req.user._id);
+  }
+
+  res.redirect(`/course/${req.params.id}`);
 });
 
 module.exports = courseController;
