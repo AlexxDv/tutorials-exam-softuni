@@ -16,24 +16,25 @@
   <body>
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-        <a class="navbar-brand" href="#">Tutorials</a>
+        <a class="navbar-brand" href="/">Tutorials</a>
 
         <ul class="navbar-nav ml-auto">
           {{#if username}}
             <li class="nav-item">
-              <a class="nav-link" href="#">Welcome, {{username}}</a>
+              <a class="nav-link" href="javascript:void(0)">Welcome,
+                {{username}}</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="#">Logout</a>
+              <a class="nav-link" href="/auth/logout">Logout</a>
             </li>
           {{else}}
             <li class="nav-item">
-              <a class="nav-link" href="#">Login</a>
+              <a class="nav-link" href="/auth/login">Login</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="#">Register</a>
+              <a class="nav-link" href="/auth/register">Register</a>
             </li>
           {{/if}}
 
@@ -42,7 +43,8 @@
       {{#if errors}}
         <section class="notifications">
           {{#each errors}}
-            <p class="notification-message">{{this}}</p> <!-- Щом е масив от стрингове го викаме само с this -->
+            <p class="notification-message">{{this}}</p>
+            <!-- Щом е масив от стрингове го викаме само с this -->
           {{/each}}
         </section>
       {{/if}}
