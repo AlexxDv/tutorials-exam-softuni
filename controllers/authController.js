@@ -1,7 +1,8 @@
+const { body } = require("express-validator");
 const { register, login } = require("../services/userService");
 const { parseError } = require("../util/parser");
 
-const authController = require('express').Router()
+const authController = require("express").Router();
 
 authController.get("/register", (req, res) => {
   //TODO replace with actual view by assignment
@@ -10,6 +11,16 @@ authController.get("/register", (req, res) => {
 });
 
 authController.post("/register", async (req, res) => {
+  body("username")
+    .isLength({ min: 5 })
+    .withMessage("Username must be at least 5 characters long")
+    .isAlphanumeric()
+    .withMessage("Username must contain only letters and numbers");
+  body("password")
+    .isLength({ min: 5 })
+    .withMessage("Password must be at least 5 characters long")
+    .isAlphanumeric()
+    .withMessage("Password must contain only letters and numbers");
   try {
     if (req.body.username == "" || req.body.password == "") {
       throw new Error("Please fill out all fields");
@@ -65,7 +76,7 @@ authController.post("/login", async (req, res) => {
 });
 
 authController.get("/logout", async (req, res) => {
-  res.clearCookie('token');
-  res.redirect("/"); 
-})
+  res.clearCookie("token");
+  res.redirect("/");
+});
 module.exports = authController;
