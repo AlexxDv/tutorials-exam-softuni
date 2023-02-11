@@ -1,6 +1,6 @@
 function parseError(error) {
   if (error.name == "ValidationError") {
-    Object.values(error.errors).map((v) => v.message);
+    return Object.values(error.errors).map((v) => v.message); // TODO put return 
   } else {
     return error.message.split("\n");
   }
