@@ -18,7 +18,9 @@ courseController.get("/:id", async (req, res) => {
   const course = await getById(req.params.id);
 
   course.isOwner = course.owner.toString() == req.user._id.toString();
-  course.enrolled = course.users.map(x => x.toString()).includes(req.user._id.toString());
+  course.enrolled = course.users
+    .map((x) => x.toString())
+    .includes(req.user._id.toString());
 
   res.render("details", {
     title: course.title,
@@ -97,9 +99,10 @@ courseController.get("/:id/enroll", async (req, res) => {
       .map((x) => x.toString())
       .includes(req.user._id.toString() == false)
   ) {
-    await enrollUser(req.params.id, req.user._id);
+    console.log("enroled")
   }
 
+  await enrollUser(req.params.id, req.user._id);
   res.redirect(`/course/${req.params.id}`);
 });
 
