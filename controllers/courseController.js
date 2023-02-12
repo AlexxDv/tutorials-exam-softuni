@@ -102,5 +102,5 @@ courseController.get("/:id/enroll", async (req, res) => {
 
   res.redirect(`/course/${req.params.id}`);
 });
-
+console.log();
 module.exports = courseController;
